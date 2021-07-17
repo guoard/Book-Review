@@ -11,9 +11,6 @@ class UserAdmin(DefaultUserAdmin):
         ('Personal info', {'fields': (
             'first_name', 'last_name', 'email'
         )}),
-        # ('Wish list', {'fields': (
-        #     'wishlist',
-        # )}),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
