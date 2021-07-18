@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Genre, Author, Wishlist
+from .models import Book, Genre, Author
 
 
 @admin.register(Book)
@@ -16,7 +16,3 @@ class GenreAdmin(admin.ModelAdmin):
 class AuthorAdmin(admin.ModelAdmin):
     pass
 
-
-@admin.register(Wishlist)
-class WishlistAdmin(admin.ModelAdmin):
-    pass

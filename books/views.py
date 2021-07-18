@@ -47,3 +47,24 @@ class LikedBookList(ListAPIView):
 
     def get_queryset(self):
         return Book.objects.filter(liked_users=self.request.user)
+
+
+@api_view(['POST'])
+def modify_wishlist(request, book_id):
+    """ API endpoint to add/remove wishlist """
+    book = get_object_or_404(Book, pk=book_id)
+    if request.user in book.wished_users.all():
+        book.wished_users.remove(request.user)
+        book.save()
+        return Response({'message': 'removed from wishlist'}, status=status.HTTP_200_OK)
+    else:
+        book.wished_users.add(request.user)
+        book.save()
+        return Response({'message': 'Added to wishlist'}, status=status.HTTP_200_OK)
+
+
+class WishedBookList(ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        return Book.objects.filter(wished_users=self.request.user)

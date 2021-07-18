@@ -23,7 +23,7 @@ class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        exclude = ['liked_users']
+        exclude = ['liked_users', 'wished_users']
 
 
 class DetailBookSerializer(serializers.ModelSerializer):
@@ -34,16 +34,7 @@ class DetailBookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book
-        fields = '__all__'
+        exclude = ['wished_users']
 
     def get_likes_count(self, obj):
         return obj.liked_users.count()
-
-# class LikedBookSerializer(ModelSerializer):
-#     author = AuthorField(read_only=True)
-#     genre = GenreField(read_only=True, many=True)
-#
-#     class Meta:
-#         model = Book
-#         # fields = '__all__'
-#         exclude =

@@ -1,11 +1,13 @@
 from rest_framework import generics
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ListUserSerializer, UserWishlistSerializer
+from books.models import Book
 
 
 class LogoutAPIView(APIView):
@@ -20,3 +22,38 @@ class UserRegistration(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
 
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ListUserSerializer
+    permission_classes = (IsAdminUser,)
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = ListUserSerializer
+    permission_classes = (IsAdminUser,)
+
+
+class UserWishlist(APIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        wished_book = user.wishlist.all()
+        serializer = UserWishlistSerializer(wished_book, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        book_id = request.data.get('id')
+        book = get_object_or_404(Book, pk=book_id)
+        book.wished_users.add(user)
+        return Response({'message': f'book added to {user.username}\'s wishlist'}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
+        book_id = request.data.get('id')
+        book = get_object_or_404(Book, pk=book_id)
+        book.wished_users.remove(user)
+        return Response({'message': f'book removed from {user.username}\'s wishlist'})

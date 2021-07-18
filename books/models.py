@@ -34,17 +34,8 @@ class Book(models.Model):
     genre = models.ManyToManyField(Genre)
     language = models.CharField(max_length=2, default=BookLanguage.PERSIAN, choices=BookLanguage.choices)
     liked_users = models.ManyToManyField(User, related_name='likes', blank=True)
+    wished_users = models.ManyToManyField(User, related_name='wishlist', blank=True)
     # TODO: implement image field
 
     def __str__(self):
         return self.title
-
-
-class Wishlist(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    wished_book = models.ManyToManyField(Book)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'wishlist of {self.user}'
