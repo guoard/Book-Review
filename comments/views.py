@@ -28,7 +28,7 @@ class ListComment(generics.ListAPIView):
     def get_queryset(self):
         book_id = self.kwargs.get('book_id')
         book = get_object_or_404(Book, pk=book_id)
-        order_by = self.request.query_params.get('order_by', '')
+        order_by = self.request.query_params.get('order_by', '-created')
         queryset = Comment.objects.filter(book=book)
 
         return queryset.order_by(order_by)

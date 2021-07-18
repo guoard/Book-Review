@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -28,7 +30,19 @@ class Comment(models.Model):
 
     @property
     def read_duration(self):
-        return self.end_time_reading - self.start_time_reading
+        return (self.end_time_reading - self.start_time_reading).days
+
+    @property
+    def created_at(self):
+        time = datetime.now()
+        if self.created.day == time.day:
+            return f'{time.hour - self.created.hour} hours ago'
+        elif self.created.month == time.month:
+            return f'{time.day - self.created.day} days ago'
+        elif self.created.year == time.year:
+            return f'{time.month - self.created.month} months ago'
+        else:
+            return f'{time.year - self.created.year} years ago'
 
     def __str__(self):
         return f"{self.author} commented for {self.book}"
