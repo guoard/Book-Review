@@ -24,4 +24,13 @@ class BookSerializer(ModelSerializer):
 class DetailBookSerializer(ModelSerializer):
     class Meta:
         model = Book
-        exclude = ('liked_user',)
+        exclude = ['liked_user']
+
+
+class LikedBookSerializer(ModelSerializer):
+    author = AuthorField(read_only=True)
+    genre = GenreField(read_only=True, many=True)
+
+    class Meta:
+        model = Book
+        fields = '__all__'

@@ -33,7 +33,7 @@ class Book(models.Model):
     summary = models.TextField()
     genre = models.ManyToManyField(Genre)
     language = models.CharField(max_length=2, default=BookLanguage.PERSIAN, choices=BookLanguage.choices)
-    liked_user = models.ManyToManyField(User, related_name='likes', blank=True)
+    liked_users = models.ManyToManyField(User, related_name='likes', blank=True)
     # TODO: implement image field
 
     def __str__(self):
