@@ -1,36 +1,49 @@
-from rest_framework.serializers import ModelSerializer, RelatedField
-from .models import Book, Author, Genre
+from rest_framework import serializers
+from .models import Book
 
 
-class AuthorField(RelatedField):
+class AuthorField(serializers.RelatedField):
     def to_representation(self, value):
         return value.fullname
 
 
-class GenreField(RelatedField):
+class GenreField(serializers.RelatedField):
     def to_representation(self, value):
         return value.name
 
 
-class BookSerializer(ModelSerializer):
+class UserField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.username
+
+
+class BookSerializer(serializers.ModelSerializer):
     author = AuthorField(read_only=True)
     genre = GenreField(read_only=True, many=True)
 
     class Meta:
         model = Book
-        exclude = ('liked_user',)
+        exclude = ['liked_users']
 
 
-class DetailBookSerializer(ModelSerializer):
-    class Meta:
-        model = Book
-        exclude = ['liked_user']
-
-
-class LikedBookSerializer(ModelSerializer):
+class DetailBookSerializer(serializers.ModelSerializer):
+    liked_users = UserField(read_only=True, many=True)
     author = AuthorField(read_only=True)
     genre = GenreField(read_only=True, many=True)
+    likes_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Book
         fields = '__all__'
+
+    def get_likes_count(self, obj):
+        return obj.liked_users.count()
+
+# class LikedBookSerializer(ModelSerializer):
+#     author = AuthorField(read_only=True)
+#     genre = GenreField(read_only=True, many=True)
+#
+#     class Meta:
+#         model = Book
+#         # fields = '__all__'
+#         exclude =

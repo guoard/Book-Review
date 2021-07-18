@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
 from .permissions import IsStaffOrReadOnly
-from .serializers import BookSerializer, DetailBookSerializer, LikedBookSerializer
+from .serializers import BookSerializer, DetailBookSerializer
 from .models import Book
 
 
@@ -43,8 +43,7 @@ def like_book(request, book_id):
 
 
 class LikedBookList(ListAPIView):
-    serializer_class = LikedBookSerializer
+    serializer_class = BookSerializer
 
     def get_queryset(self):
-        books = Book.objects.filter(liked_users=self.request.user)
-        return books
+        return Book.objects.filter(liked_users=self.request.user)
