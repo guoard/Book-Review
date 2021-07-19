@@ -38,10 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
@@ -145,3 +153,6 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter'
     ]
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
