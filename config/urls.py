@@ -17,14 +17,34 @@ from dj_rest_auth.views import PasswordResetConfirmView
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Book Review API",
+        default_version="v1",
+        description="A simple API for Book Review",
+        terms_of_service="",
+        contact=openapi.Contact(email="afsharzadeh1998@gmail.com"),
+        license=openapi.License(name="MIT License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
-    path('book/', include('books.urls', namespace='books')),
-    path('comment/', include('comments.urls', namespace='comments')),
+    path('api/accounts/', include('accounts.urls')),
+    path('api/book/', include('books.urls', namespace='books')),
+    path('api/comment/', include('comments.urls', namespace='comments')),
 
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('api/rest-auth/password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(),
+    path('api/account/', include('dj_rest_auth.urls')),
+    path('api/account/registration/', include('dj_rest_auth.registration.urls')),
+    path('api/account/password/reset/confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(),
          name='password_reset_confirm'),
+
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+
 ]
