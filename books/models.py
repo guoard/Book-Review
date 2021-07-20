@@ -35,7 +35,9 @@ class Book(models.Model):
     language = models.CharField(max_length=2, default=BookLanguage.PERSIAN, choices=BookLanguage.choices)
     liked_users = models.ManyToManyField(User, related_name='likes', blank=True)
     wished_users = models.ManyToManyField(User, related_name='wishlist', blank=True)
-    # TODO: implement image field
+
+    photo1 = models.ImageField(upload_to='book_images/%Y/%m/%d/', null=True, blank=True)
+    photo2 = models.ImageField(upload_to='book_images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
         return self.title
