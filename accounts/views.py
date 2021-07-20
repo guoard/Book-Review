@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
@@ -27,6 +29,10 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = ListUserSerializer
     permission_classes = (IsAdminUser,)
+
+    @method_decorator(cache_page(60))
+    def dispatch(self, *args, **kwargs):
+        return super(UserList, self).dispatch(*args, **kwargs)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
