@@ -54,6 +54,8 @@ INSTALLED_APPS = [
 
     'drf_yasg',
 
+    'location_field.apps.DefaultConfig',
+
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
     'comments.apps.CommentsConfig'
